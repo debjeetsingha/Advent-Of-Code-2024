@@ -43,10 +43,32 @@ def distance_1to3(report:list)-> bool:
             return False
     return True
 
+def is_safe(report: list) -> bool:
+    if monotonic(report) and distance_1to3(report):
+        return True
+    return False
+
+
+def safe_with_damper(report: list) -> bool:
+    if is_safe(report):
+        return True
+    for i in range(len(report)):
+        new_report = report[:i] + report[i+1:]
+        if is_safe(new_report):
+            return True
+    return False
+
 def get_safe_report_count(report_list):
     safe_count = 0
     for report in report_list:
-        if monotonic(report) and distance_1to3(report):
+        if is_safe(report):
+            safe_count += 1
+    return safe_count
+
+def safe_count_with_damper(report_list):
+    safe_count = 0
+    for report in report_list:
+        if safe_with_damper(report):
             safe_count += 1
     return safe_count
 
@@ -56,6 +78,9 @@ if __name__=="__main__":
 
     # part 1
     print(get_safe_report_count(report_list))
+
+    # part2
+    print(safe_count_with_damper(report_list))
 
 
 
